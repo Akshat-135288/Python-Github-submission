@@ -1,0 +1,33 @@
+import numpy as np
+
+# 1. Load robot positions from CSV file
+# (Assuming CSV has: x,y columns)
+positions = np.genfromtxt("robot_path/robot_path.csv", delimiter=",", skip_header=1)
+
+x = positions[:, 0]
+y = positions[:, 1]
+
+# 2. Calculations
+results = {}
+
+# Total distance traveled
+diffs = np.diff(positions, axis=0)  # consecutive differences
+step_distances = np.sqrt(np.sum(diffs**2, axis=1))  # Euclidean distance for each step
+results["total_distance"] = np.sum(step_distances)
+
+# Farthest point from origin (0,0)
+distances_from_origin = np.sqrt(x**2 + y**2)
+max_dist_index = np.argmax(distances_from_origin)
+results["farthest_point"] = (float(x[max_dist_index]), float(y[max_dist_index]))
+results["max_distance_from_origin"] = float(distances_from_origin[max_dist_index])
+
+# Detect revisits (if same position occurs more than once)
+unique_positions = set(map(tuple, positions))
+results["revisited"] = len(unique_positions) < len(positions)
+
+# 3. Save results into a file
+with open("robot_path/processed_results.txt", "w") as f:
+    for key, value in results.items():
+        f.write(f"{key}: {value}\n")
+
+print("✅ Processed results saved in robot_path/processed_results.txt")

@@ -1,0 +1,41 @@
+import numpy as np
+
+# 1. Load the sensor data from CSV file
+# (Make sure sensor_data/sensor_data.csv exists in the same folder structure)
+data = np.genfromtxt("sensor_data/sensor_data.csv", delimiter=",", skip_header=1)
+
+# Extract columns (assuming format: time, temperature, distance, battery)
+time = data[:, 0].astype(int)
+temperature = data[:, 1]
+distance = data[:, 2]
+battery = data[:, 3]
+
+# 2. Calculations
+results = {}
+
+# Average, min, max of each sensor
+results["temperature_avg"] = np.mean(temperature)
+results["temperature_min"] = np.min(temperature)
+results["temperature_max"] = np.max(temperature)
+
+results["distance_avg"] = np.mean(distance)
+results["distance_min"] = np.min(distance)
+results["distance_max"] = np.max(distance)
+
+results["battery_avg"] = np.mean(battery)
+results["battery_min"] = np.min(battery)
+results["battery_max"] = np.max(battery)
+
+# Time when temperature was highest
+max_temp_index = np.argmax(temperature)
+results["time_of_max_temperature"] = int(time[max_temp_index])
+
+# Count times battery percentage went below 30%
+results["battery_below_30_count"] = int(np.sum(battery < 30))
+
+# 3. Save results into an output file
+with open("sensor_data/processed_results.txt", "w") as f:
+    for key, value in results.items():
+        f.write(f"{key}: {value}\n")
+
+print("✅ Processed results saved in sensor_data/processed_results.txt")
