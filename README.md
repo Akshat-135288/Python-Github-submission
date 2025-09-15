@@ -1,2 +1,2 @@
 # Python-Github-submission
-Hi, here is my python worksheets(1-4) submission.
+Hi, here is my python Worksheets(1-4) and Mini_Project submission.
